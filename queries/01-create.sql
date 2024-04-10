@@ -1,4 +1,4 @@
-CREATE TABLE mensajes (
+CREATE TABLE mensaje (
 	id_mensaje INT NOT NULL AUTO_INCREMENT,
     autor VARCHAR(30) NOT NULL DEFAULT "PERRO LOCO",
     cuerpo VARCHAR(255) NOT NULL,
