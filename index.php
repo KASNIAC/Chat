@@ -9,18 +9,25 @@
 <body>
    <div id="messages" class="messages">
       <?php include 'php/load.php' ?>
-      <div class="message sent">
-         Lorem ipsum dolor sit amet consectetur adipisicing elit. A saepe numquam blanditiis eos eveniet quis iusto ex minima cum alias! Ducimus nobis vero quae voluptatem ipsam temporibus in doloribus adipisci?
-      </div>
+      <!-- <div class="message sent">
+         <div class="metadata">
+            <p class="autor">Autor</p>
+            <p class="date">Date</p>
+         </div>
+         <div class="content">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. A saepe numquam blanditiis eos eveniet quis iusto ex minima cum alias! Ducimus nobis vero quae voluptatem ipsam temporibus in doloribus adipisci?
+         </div>
+      </div> -->
    </div>
-   <form method="GET" action="php/process.php" >
+   <form method="POST" action="php/sent.php" >
       <div class="write-message">
-         <label for="username">Username: <input id="username" type="text"> </label>
-         <textarea class="body-message" placeholder="255 chars max lenght" rows="5" minlength="1" maxlength="255"></textarea>
-         <button class="button" id="button-send" onclick="prueba()">Send</button>
+         <label for="username">Username: <input id="username" name="username" type="text"> </label>
+         <textarea id="message-body" class="message-body" placeholder="255 chars max lenght" name="message-body" rows="5" minlength="1" maxlength="255"></textarea>
+         <button class="button" id="button-send">Send</button>
       </div>
    </form>
 
    <script src="script.js"></script>
+
 </body>
 </html>
