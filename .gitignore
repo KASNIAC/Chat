@@ -1,2 +1,3 @@
 /backend/secret/*
 !/backend/secret/.htaccess
+/backend/_pruebas.php

@@ -9,7 +9,8 @@
 <body>
    <div id="messages" class="messages">
       <?php include 'backend/load.php' ?>
-      <!-- <div class="message sent">
+      <!-- 
+      <div class="message sent">
          <div class="metadata">
             <p class="autor">Autor</p>
             <p class="date">Date</p>
@@ -17,9 +18,10 @@
          <div class="content">
             Lorem ipsum dolor sit amet consectetur adipisicing elit. A saepe numquam blanditiis eos eveniet quis iusto ex minima cum alias! Ducimus nobis vero quae voluptatem ipsam temporibus in doloribus adipisci?
          </div>
-      </div> -->
+      </div> 
+   -->
    </div>
-   <form method="POST" action="backend/sent.php" >
+   <form method="POST" action="backend/sent.php" > 
       <div class="write-message">
          <label for="username">Username: <input id="username" name="username" type="text"> </label>
          <textarea id="message-body" class="message-body" placeholder="255 chars max lenght" name="message-body" rows="5" minlength="1" maxlength="255"></textarea>
