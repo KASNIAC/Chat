@@ -10,9 +10,9 @@
    <script>
       async function carga( ) {
          let respuesta = await fetch("backend/_prueba_ajax.php");
-         let texto = await respuesta.text( );
+         let persona = await respuesta.json( );
          
-         document.getElementById("div").textContent = texto;
+         document.getElementById("div").textContent = persona.hobby;
       }
    </script>
 </body>

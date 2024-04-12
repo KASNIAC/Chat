@@ -8,7 +8,5 @@
       ]
    ];
 
-   echo "hola mundo\n";
-   echo json_encode($persona), "\n";
-   echo "adios mundo\n";
+   echo json_encode($persona);
 ?>
