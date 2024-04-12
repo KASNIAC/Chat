@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body onload="carga( )">
+   <h1>Prueba</h1>
+   <div id="div"></div>
+   <script>
+      async function carga( ) {
+         let respuesta = await fetch("backend/_prueba_ajax.php");
+         let persona = await respuesta.json( );
+         
+         document.getElementById("div").textContent = persona.hobby;
+      }
+   </script>
+</body>
+</html>
