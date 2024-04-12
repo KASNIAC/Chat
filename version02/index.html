@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="stylesheet" href="styles.css">
+   <title>Chat - UAM</title>
+</head>
+<body onload="carga()">
+   <div id="messages" class="messages">
+      <!-- 
+      <div class="message sent">
+         <div class="metadata">
+            <p class="autor">Autor</p>
+            <p class="date">Date</p>
+         </div>
+         <div class="content">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. A saepe numquam blanditiis eos eveniet quis iusto ex minima cum alias! Ducimus nobis vero quae voluptatem ipsam temporibus in doloribus adipisci?
+         </div>
+      </div> 
+      -->
+   </div>
+   <form method="POST" action="backend/sent.php" > 
+      <div class="write-message">
+         <label for="username">Username: <input id="username" name="username" type="text"> </label>
+         <textarea id="message-body" class="message-body" placeholder="255 chars max lenght" name="message-body" rows="5" minlength="1" maxlength="255"></textarea>
+         <button class="button" id="button-send">Send</button>
+      </div>
+   </form>
+
+   <script src="script.js"></script>
+   <script>
+      async function carga(){
+         let respuesta = await fetch("backend/load.php");
+         let mensajes = await respuesta.json();
+         
+         // Los atributos ("class", "href", "id", etc.) se mapean a propiedades de los objetos de js (objecto.className,objeto.href, objecto.id)
+         // El atributo (html) se llama class, la propiedad asociada (js) se llama className
+         // autor.className = cosa; == autor.setAttribute("class", cosa);
+         let padre = document.getElementById("messages");
+         for(let i = 0; i < mensajes.length; ++i){
+            console.log(i);
+            let message_sent = document.createElement("div"); 
+            message_sent.setAttribute("class", "message sent");
+
+            let metadata = document.createElement("div");
+            metadata.setAttribute("class", "metadata");
+
+            let autor = document.createElement("p");
+            autor.setAttribute("class", "autor");
+            autor.textContent = mensajes[i].autor; // mensajes[i]["autor"]
+
+            let fecha = document.createElement("p");
+            fecha.setAttribute("class", "date");
+            fecha.textContent = mensajes[i].fecha; // mensajes[i]["fecha"]
+
+            let cuerpo = document.createElement("div");
+            cuerpo.setAttribute("class", "content");
+            cuerpo.textContent = mensajes[i].cuerpo; // mensajes[i]["cuerpo"]
+            
+
+            padre.appendChild(message_sent);
+            message_sent.appendChild(metadata);
+            message_sent.appendChild(cuerpo);
+            metadata.appendChild(autor);
+            metadata.appendChild(fecha);
+         }
+      }
+   </script>
+</body>
+</html>

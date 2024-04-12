@@ -1,5 +1,3 @@
-
-
 document.addEventListener('DOMContentLoaded', function() {
    // Obtener el botón
    var boton = document.getElementById('button-send');
@@ -16,7 +14,3 @@ document.addEventListener('DOMContentLoaded', function() {
    // Agregar el evento keydown al documento para detectar la tecla Enter
    document.addEventListener('keydown', handleEnterKey);
 });
-
-function prueba() {
-   console.log("Hola mundo")
-}
