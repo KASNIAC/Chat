@@ -5,8 +5,9 @@
    $conexion = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_DATABASE);
    $r1 = $conexion->query("SELECT autor, cuerpo, fecha FROM mensaje");
    $arr = $r1->fetch_all(MYSQLI_ASSOC);
+   echo json_encode($arr);
 
-
+   /*
    foreach($arr as $tupla) {
       $mensaje = 
       "<div class='message sent'>" .
@@ -25,4 +26,5 @@
 
       echo $mensaje;
    }
+   */
 ?>

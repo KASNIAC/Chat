@@ -6,9 +6,8 @@
    <link rel="stylesheet" href="styles.css">
    <title>Chat - UAM</title>
 </head>
-<body>
+<body onload="carga( )">
    <div id="messages" class="messages">
-      <?php include 'backend/load.php' ?>
       <!-- 
       <div class="message sent">
          <div class="metadata">
@@ -30,6 +29,10 @@
    </form>
 
    <script src="script.js"></script>
-
+   <script>
+      async function carga( ) {
+         //...
+      }
+   </script>
 </body>
 </html>
