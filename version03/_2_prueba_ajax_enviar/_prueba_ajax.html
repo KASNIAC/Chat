@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+   <h1>Prueba</h1>
+   <form>
+      Texto: <input type="text" name="texto" required><br>
+      <button type="button" onclick="enviar(this.form)">Enviar</button>
+      <!-- 
+           <button>Enviar</button>                    Es como si tuviera type="submit"
+           <button type="submit">Enviar</button>      Envía la forma y te manda para allá, recargando   (<input type="submit" value="Enviar">)
+           <button type="button">Enviar</button>      Dar click   (<input type="button" value="Enviar">)
+      -->
+   </form>
+   <script>
+      async function enviar(forma) {
+         if (!forma.reportValidity( )) {     // checkValidity( ) no regaña
+            return;
+         }
+      
+         let respuesta = await fetch("_prueba_ajax.php", {
+            "body": new FormData(forma),
+            "method": "POST"
+         });
+         let texto = await respuesta.text( );
+         
+         alert(texto);
+      }
+   </script>
+</body>
+</html>
