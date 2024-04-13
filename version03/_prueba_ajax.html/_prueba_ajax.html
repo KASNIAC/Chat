@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body onload="carga( )">
+
+   <h1>Prueba</h1>
+   <div id="div"></div>
+
+   <script>
+      async function carga( ) {
+         let respuesta = await fetch("_prueba_ajax.php"); // La respuesta será todo a lo que "_prueba_ajax.php" le haya hecho echo
+         let persona = await respuesta.json( );           // Decido que la respuesta la veré como un JSON
+
+         document.getElementById("div").textContent = persona.hobby;
+
+
+         
+         // innerHTML vs textContent
+         // let respuesta = await fetch("_prueba_ajax.php");
+         // let echo_texto = await respuesta.text();     // Decido que la respuesta la veré como un string (checar caso innerHTML vs textContent)
+
+         // document.getElementById("div").innerHTML = echo_texto;
+         // document.getElementById("div").textContent = echo_texto;
+      }
+   </script>
+</body>
+</html>
