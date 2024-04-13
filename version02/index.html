@@ -36,10 +36,12 @@
          
          // Los atributos ("class", "href", "id", etc.) se mapean a propiedades de los objetos de js (objecto.className,objeto.href, objecto.id)
          // El atributo (html) se llama class, la propiedad asociada (js) se llama className
-         // autor.className = cosa; == autor.setAttribute("class", cosa);
+         // autor.className = cosa;
+         //  es equivalente a 
+         // autor.setAttribute("class", cosa);
+         
          let padre = document.getElementById("messages");
          for(let i = 0; i < mensajes.length; ++i){
-            console.log(i);
             let message_sent = document.createElement("div"); 
             message_sent.setAttribute("class", "message sent");
 
@@ -58,7 +60,6 @@
             cuerpo.setAttribute("class", "content");
             cuerpo.textContent = mensajes[i].cuerpo; // mensajes[i]["cuerpo"]
             
-
             padre.appendChild(message_sent);
             message_sent.appendChild(metadata);
             message_sent.appendChild(cuerpo);
