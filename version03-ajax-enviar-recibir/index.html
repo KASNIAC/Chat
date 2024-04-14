@@ -22,8 +22,8 @@
    </div>
    <form>
       <div class="write-message">
-         <label for="username">Username: <input id="username" name="username" type="text"> </label>
-         <textarea id="message-body" class="message-body" placeholder="255 chars max lenght" name="message-body" rows="5" minlength="1" maxlength="255"></textarea>
+         <label for="username">Username: <input id="username" name="autor" type="text"> </label>
+         <textarea id="message-body" class="message-body" placeholder="255 chars max lenght" name="cuerpo" rows="5" minlength="1" maxlength="255"></textarea>
          <button class="button" id="button-send" type="button" onclick="enviar(this.form)">Send</button>
       </div>
    </form>
@@ -55,9 +55,10 @@
          if(!forma.checkValidity()){ // reportValidity( ) sí regaña
             return;
          }
+         let f_data = new FormData(forma);
 
          let respuesta = await fetch("backend/sent.php", {
-            "body": new FormData(forma),
+            "body": f_data,
             "method": "POST" // Lo normal es que las formas lleguen usando POST
          });
          let texto = await respuesta.text( ); // Regresa la fecha en caso de NO errores
@@ -65,12 +66,11 @@
          if(texto != "vacio-usuario-mensaje" && texto != "vacio-usuario" && texto != "vacio-mensaje"){
             let padre = document.getElementById("messages");
             let plantilla = document.getElementById("message_template");
-            let f_data = new FormData(forma);
 
             let copia = plantilla.content.cloneNode(true);
-            copia.querySelector(".author").textContent = f_data.get("username");
+            copia.querySelector(".author").textContent = f_data.get("autor");
             copia.querySelector(".date").textContent = texto;
-            copia.querySelector(".content").textContent = f_data.get("message-body");
+            copia.querySelector(".content").textContent = f_data.get("cuerpo");
             padre.appendChild(copia);
          }
 
