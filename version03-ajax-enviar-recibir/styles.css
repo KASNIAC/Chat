@@ -46,11 +46,14 @@ body {
 .metadata {
    display: flex;
 }
-.autor {
+.author {
    width: 60%;
 }
 .date {
    margin: auto auto;
+}
+.content {
+   word-wrap: break-word;
 }
 form .write-message label {
    cursor: pointer;

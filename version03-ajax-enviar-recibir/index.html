@@ -11,7 +11,7 @@
       <template id="message_template">
          <div class="message sent">
             <div class="metadata">
-               <p class="autor">Autor</p>
+               <p class="author">Author</p>
                <p class="date">Date</p>
             </div>
             <div class="content">
@@ -20,11 +20,11 @@
          </div> 
       </template>
    </div>
-   <form method="POST" action="backend/sent.php" > 
+   <form>
       <div class="write-message">
          <label for="username">Username: <input id="username" name="username" type="text"> </label>
          <textarea id="message-body" class="message-body" placeholder="255 chars max lenght" name="message-body" rows="5" minlength="1" maxlength="255"></textarea>
-         <button class="button" id="button-send">Send</button>
+         <button class="button" id="button-send" type="button" onclick="enviar(this.form)">Send</button>
       </div>
    </form>
 
@@ -36,19 +36,44 @@
          
          // Los atributos ("class", "href", "id", etc.) se mapean a propiedades de los objetos de js (objecto.className,objeto.href, objecto.id)
          // El atributo (html) se llama class, la propiedad asociada (js) se llama className
-         // autor.className = cosa;
+         // author.className = cosa;
          //  es equivalente a 
-         // autor.setAttribute("class", cosa);
+         // author.setAttribute("class", cosa);
          
          let padre = document.getElementById("messages");
          let plantilla = document.getElementById("message_template");
          for(let mensaje of mensajes) {
             let copia = plantilla.content.cloneNode(true);
-            copia.querySelector(".autor").textContent = mensaje.autor;
+            copia.querySelector(".author").textContent = mensaje.autor;
             copia.querySelector(".date").textContent = mensaje.fecha;
             copia.querySelector(".content").textContent = mensaje.cuerpo;
             padre.appendChild(copia);
          }
+      }
+
+      async function enviar(forma) {
+         if(!forma.checkValidity()){ // reportValidity( ) sí regaña
+            return;
+         }
+
+         let respuesta = await fetch("backend/sent.php", {
+            "body": new FormData(forma),
+            "method": "POST" // Lo normal es que las formas lleguen usando POST
+         });
+         let texto = await respuesta.text( ); // Regresa la fecha en caso de NO errores
+
+         if(texto != "vacio-usuario-mensaje" && texto != "vacio-usuario" && texto != "vacio-mensaje"){
+            let padre = document.getElementById("messages");
+            let plantilla = document.getElementById("message_template");
+            let f_data = new FormData(forma);
+
+            let copia = plantilla.content.cloneNode(true);
+            copia.querySelector(".author").textContent = f_data.get("username");
+            copia.querySelector(".date").textContent = texto;
+            copia.querySelector(".content").textContent = f_data.get("message-body");
+            padre.appendChild(copia);
+         }
+
       }
    </script>
 </body>

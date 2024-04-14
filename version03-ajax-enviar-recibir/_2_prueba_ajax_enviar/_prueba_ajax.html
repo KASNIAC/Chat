@@ -7,7 +7,7 @@
 <body>
    <h1>Prueba</h1>
    <form>
-      Texto: <input type="text" name="texto" required><br>
+      Texto: <input type="text" name="texto" required><br> <!-- required solo aplica si hubiera usado un button de tipo submit -->
       <button type="button" onclick="enviar(this.form)">Enviar</button>
       <!-- 
            <button>Enviar</button>                    Es como si tuviera type="submit"
@@ -23,7 +23,7 @@
       
          let respuesta = await fetch("_prueba_ajax.php", {
             "body": new FormData(forma),
-            "method": "POST"
+            "method": "POST" // Lo normal es que las formas lleguen usando POST
          });
          let texto = await respuesta.text( );
          
