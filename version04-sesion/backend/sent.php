@@ -1,7 +1,9 @@
 <?php
    require_once(__DIR__.'/secret/config.php');
    
+   date_default_timezone_set('America/Mexico_City');
    session_start( );
+   
    if (count($_SESSION) == 0) {
       // es la primera vez que llega este usuario
    } else {
@@ -23,9 +25,7 @@
       } else if($_POST['cuerpo'] == ""){
          echo "vacio-mensaje";
       } else{
-         date_default_timezone_set('America/Mexico_City');
          $fecha = date('Y-m-d H:i:s');
-
          $autor = $conexion->escape_string($_POST['autor']);
          $cuerpo = $conexion->escape_string($_POST['cuerpo']);
          $conexion->query("INSERT INTO mensaje (autor, cuerpo, fecha) VALUES ('$autor', '$cuerpo', '$fecha')");
