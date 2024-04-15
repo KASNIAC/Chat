@@ -1,6 +1,18 @@
 <?php
    require_once(__DIR__.'/secret/config.php');
    
+   session_start( );
+   if (count($_SESSION) == 0) {
+      // es la primera vez que llega este usuario
+   } else {
+      /*
+      if (ya mandó muchos mensajes) {
+         echo "espera";
+         exit;
+      }
+      */
+   }
+   
    $conexion = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_DATABASE);
 
    if(isset($_POST['autor'], $_POST['cuerpo'])){
