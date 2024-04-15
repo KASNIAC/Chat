@@ -7,7 +7,7 @@
    } else {
       /*
       if (ya mandó muchos mensajes) {
-         echo "espera";
+         echo 'demasiados-mensajes';
          exit;
       }
       */
