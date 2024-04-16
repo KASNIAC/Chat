@@ -4,15 +4,17 @@
    date_default_timezone_set('America/Mexico_City');
    session_start( );
    
-   if (count($_SESSION) == 0) {
-      // es la primera vez que llega este usuario
+   // if(count($_SESSION) == 0) -> Puede dar fallas si es que otro archivo PHP
+   // previamente había creado una sesión, como por ejemplo:
+   // /_1_prueba_sesion/sesion.php
+   if (isset($_SESSION['rastrea-mensaje']) == false) {       // es la primera vez que llega este usuario
+      $_SESSION['rastrea-mensaje'] = time();
+   } else if(time() - $_SESSION['rastrea-mensaje'] < 10) { 
+      echo "demasiados-mensajes";
+      // print_r ($_SESSION);
+      exit;
    } else {
-      /*
-      if (ya mandó muchos mensajes) {
-         echo 'demasiados-mensajes';
-         exit;
-      }
-      */
+      $_SESSION['rastrea-mensaje'] = time();
    }
    
    $conexion = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_DATABASE);

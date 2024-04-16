@@ -34,9 +34,19 @@
 <br>
 
   ## version03-ajax-enviar-recibir
-///
+*Se agregó la opción de enviar de manera asíncrona los datos el formulario hacia sent.php mesiange AJAX:*
 1) Se hace uso de **template** en index.html para facilitar agregar el contenido recibido desde php. **template** NO se muestra al inicio en el html, es como tener un cacho de html que se ocupará en un futuro.
 2) **htmlspecialchars** ya es necesario debido a que el textContent se encarga de evitar las inyecciones. El la version02 se corregía que **sent.php** pudiera inyectar código gracias al **htmlspecialchars**, sin embargo, si en la BD por alguna razón ya hubiera código HTML y al procesarlo no se hiciera con textContent entonces las inyecciones seguirían (por los menos inyectar etiquetyas HTML, ya que los script no se ejecutarían).
 3) Al consultar la BD, se puede apreciar que al hacer uso de **htmlspecialchars** no se guarda tal cual el HTML sino que se guardan las entidades html.
 4) En general no debería ser problema guardar HTML en la BD, siempre y cuando NO se pegue en el propio  HTML.
 5) **sent.php** ya no será quien regañe al usuario, ahora solo se encarga de mandarle la respuesta al html y este decidirá como regañar al usuario.
+
+*Desventajas*
+1) Se pueden agregar múltiples mensajes desde la consola del desarrollador y así saturar el servidor. Esto se logra abriendo la seccción 'Elementos' en las DevTools  y colocandole un id al formulario; posteriormente, en la sección 'Consola' se crea un for invocando a la función enviar('idFormulario').
+
+<br>
+
+  ## version04-sesion
+
+quien debe de controlar que el mensaje no vaya vacio?
+los mensajes de usuario1 no aparecen de inmediato al usuario2
