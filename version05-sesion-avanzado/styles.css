@@ -1,0 +1,72 @@
+body {
+   background-color: burlywood;
+   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+.messages {
+   max-width: 700px;
+   height: 70vh;
+   border: 10px solid red;
+   margin: auto auto;
+   overflow: auto;
+}
+.write-message {
+   display: flex;
+   flex-direction: column;
+   gap: 10px;
+   max-width: 700px;
+   height: 20vh;
+   
+   margin: 10px auto;
+   padding: 10px;
+   border: 3px solid red;
+}
+.message-body {
+   box-sizing: border-box;
+   resize: none;
+   margin: auto auto;
+   width: 100%;
+}
+.button {
+   width: 20%;
+   height: 20%;
+   margin: auto auto;
+   border-radius: 5px;
+   cursor: pointer;
+}
+.message {
+   padding: 2%;
+   padding-top: 0;
+   margin: 2%;
+   border-radius: 10px;
+}
+.sent {
+   box-sizing: border-box;
+   border: 3px solid blue;
+}
+.metadata {
+   display: flex;
+}
+.author {
+   width: 60%;
+}
+.date {
+   margin: auto auto;
+}
+.content {
+   word-wrap: break-word;
+}
+form .write-message label {
+   cursor: pointer;
+}
+form .write-message textarea {
+   padding: 2%;
+   border: none;
+}
+form .write-message textarea:hover {
+   border: none;
+}
+
+/* .received {
+   border: 3px solid rgb(36, 116, 4);
+   margin: 2% 20% 2% 1%;
+} */

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="stylesheet" href="styles.css">
+   <title>Chat - UAM</title>
+</head>
+<body onload="carga()">
+   <div id="messages" class="messages">
+      <template id="message_template">
+         <div class="message sent">
+            <div class="metadata">
+               <p class="author">Author</p>
+               <p class="date">Date</p>
+            </div>
+            <div class="content">
+               Lorem ipsum dolor sit amet consectetur adipisicing elit. A saepe numquam blanditiis eos eveniet quis iusto ex minima cum alias! Ducimus nobis vero quae voluptatem ipsam temporibus in doloribus adipisci?
+            </div>
+         </div> 
+      </template>
+   </div>
+   <form>
+      <div class="write-message">
+         <label for="username">Username: <input id="username" name="autor" type="text" required> </label>
+         <textarea id="message-body" class="message-body" placeholder="255 chars max lenght" name="cuerpo" rows="5" minlength="1" maxlength="255" required></textarea>
+         <button class="button" id="button-send" type="button" onclick="enviar(this.form)">Send</button>
+      </div>
+   </form>
+
+   <script src="script.js"></script>
+   <script>
+      let padre = document.getElementById("messages");
+      let plantilla = document.getElementById("message_template");
+
+      function agrega_mensaje(autor, fecha, cuerpo) {
+         let copia = plantilla.content.cloneNode(true);
+         copia.querySelector(".author").textContent = autor;
+         copia.querySelector(".date").textContent = fecha;
+         copia.querySelector(".content").textContent = cuerpo;
+         padre.appendChild(copia);
+      }
+
+      async function carga(){
+         let respuesta = await fetch("backend/load.php");
+         let mensajes = await respuesta.json();
+         for(let mensaje of mensajes) {
+            agrega_mensaje(mensaje.autor, mensaje.fecha, mensaje.cuerpo);
+         }
+         
+         // Los atributos ("class", "href", "id", etc.) se mapean a propiedades de los objetos de js (objecto.className,objeto.href, objecto.id)
+         // El atributo (html) se llama class, la propiedad asociada (js) se llama className
+         // author.className = cosa;
+         //  es equivalente a 
+         // author.setAttribute("class", cosa);
+      }
+
+      async function enviar(forma) {
+         if(!forma.reportValidity()){ // checkValidity( ) no regaña
+            return;
+         }
+         let f_data = new FormData(forma);
+         let respuesta = await fetch("backend/sent.php", {
+            "body": f_data,
+            "method": "POST" // Lo normal es que las formas lleguen usando POST
+         });
+         let texto = await respuesta.text( ); // Regresa la fecha en caso de NO errores
+         
+         if(texto == "demasiados-mensajes"){
+            alert("Deja de spamear mensajes");
+         } else if(texto != "vacio-usuario-mensaje" && texto != "vacio-usuario" && texto != "vacio-mensaje"){
+            agrega_mensaje(f_data.get("autor"), texto, f_data.get("cuerpo"));
+         }
+      }
+   </script>
+</body>
+</html>
