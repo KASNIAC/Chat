@@ -8,10 +8,20 @@
       <div id="g_id_onload"
          data-client_id="330917364178-utl74obou3uhk4ttk86tu0jlbnod1dev.apps.googleusercontent.com"
          data-auto_prompt="false"
-         data-callback="ALGO"></div>
+         data-callback="credencial_google"></div>
       <div class="g_id_signin" data-type="standard" data-size="large"></div>
       <script>
-
+         async function credencial_google(comprobante) {
+            let f_data = new FormData( );
+            f_data.set("comprobante", comprobante.credential);
+            let resultado = await fetch("backend/login.php", {
+               "body": f_data,
+               "method": "POST"
+            });
+            let texto = await resultado.text( );
+            
+            alert(texto);
+         }
       </script>
    </body>
 </html>
