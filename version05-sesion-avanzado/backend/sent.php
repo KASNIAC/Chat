@@ -3,13 +3,15 @@
    
    date_default_timezone_set('America/Mexico_City');
    session_name(APP_NAME);
-   //session_id(str_replace($_SERVER['REMOTE_ADDR'], '.', '-'));       // desafortunadamente NO ES una solución general
+   // session_id(str_replace($_SERVER['REMOTE_ADDR'], '.', '-')); // sesion_id(); establece el id para que no sea generado por defecto, puedo usar la IP como identificador. 
+         // La sesion ya no se vincula con la cookie, sino con la IP.
+         // Desafortunadamente NO ES una solución general, ya que dos individuos distintos pueden compartir la misma IP.
    session_start( );
    
    if(empty($_SESSION)) {
       $_SESSION['rastrea-mensaje'] = time();
    } else if(time() - $_SESSION['rastrea-mensaje'] < 10) { 
-      die("demasiados-mensajes");
+      die("demasiados-mensajes"); // die() == echo + exit
    } else {
       $_SESSION['rastrea-mensaje'] = time();
    }

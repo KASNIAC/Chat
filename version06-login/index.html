@@ -1,0 +1,79 @@
+<!doctype html>
+<html>
+   <head>
+      <meta charset="utf-8">
+      <script src="https://accounts.google.com/gsi/client" defer></script>
+      <link href="styles.css" rel="stylesheet">
+   </head>
+   <body onload="credencial_google(comprobante)">
+      <div id="no-autenticado" class="no-autenticado">
+         <div class="login">
+            <h3>Login</h3>
+            <div id="g_id_onload"
+            data-client_id="330917364178-utl74obou3uhk4ttk86tu0jlbnod1dev.apps.googleusercontent.com"
+            data-auto_prompt="false"
+            data-callback="credencial_google"></div>
+         <div class="g_id_signin" data-type="standard" data-size="large"></div>
+         </div>
+      </div>
+
+      <div id="si-autenticado" class="si-autenticado">
+         <div id="messages" class="messages">
+            <template id="message_template">
+               <div class="message sent">
+                  <div class="metadata">
+                     <p class="author">Author</p>
+                     <p class="date">Date</p>
+                  </div>
+                  <div class="content">
+                     Lorem ipsum dolor sit amet consectetur adipisicing elit. A saepe numquam blanditiis eos eveniet quis iusto ex minima cum alias! Ducimus nobis vero quae voluptatem ipsam temporibus in doloribus adipisci?
+                  </div>
+               </div> 
+            </template>
+         </div>
+         <form>
+            <div class="write-message">
+               <div>
+                  Username: <span id="username"></span>
+               </div>
+               <textarea id="message-body" class="message-body" placeholder="255 chars max lenght" name="cuerpo" rows="5" minlength="1" maxlength="255" required></textarea>
+               <button class="button" id="button-send" type="button" onclick="enviar(this.form)">Send</button>
+            </div>
+         </form>
+      </div>
+
+
+      <script src="script.js"></script>
+      <script>
+         async function credencial_google(comprobante = null) {
+            let f_data = new FormData( );
+            f_data.set("comprobante", comprobante.credential);
+            let resultado = await fetch("backend/login.php", {
+               "body": f_data,
+               "method": "POST"
+            });
+            let texto = await resultado.text( );
+            
+            // alert(texto);
+            if(texto == "error-comprobante" || texto == "sin-comprobante"){
+               alert("Fallo interno de la aplicación");
+            } 
+            // else if(texto == "login-activo") {
+            //    alert("PERRO LOCO");
+            //    document.getElementById("no-autenticado").style.display = "none";
+            //    document.getElementById("si-autenticado").style.display = "initial";
+            // } 
+            else {
+               let correo = texto.match(/.+@.+\.[A-Z|a-z]{2,}/)[0];
+               let nombreCompleto = texto.replace(correo, '').trim();
+               
+               alert(correo, nombreCompleto);
+               document.getElementById("no-autenticado").style.display = "none";
+               document.getElementById("si-autenticado").style.display = "initial";
+               console.log(nombreCompleto);
+               document.getElementById("username").textContent = nombreCompleto;
+            }
+         }
+      </script>
+   </body>
+</html>
