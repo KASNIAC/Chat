@@ -5,15 +5,15 @@
       <script src="https://accounts.google.com/gsi/client" defer></script>
       <link href="styles.css" rel="stylesheet">
    </head>
-   <body onload="credencial_google( )">
+   <body onload="inicia_sesion( )">
       <div id="no-autenticado" class="no-autenticado">
          <div class="login">
             <h3>Login</h3>
             <div id="g_id_onload"
             data-client_id="330917364178-utl74obou3uhk4ttk86tu0jlbnod1dev.apps.googleusercontent.com"
             data-auto_prompt="false"
-            data-callback="credencial_google"></div>
-         <div class="g_id_signin" data-type="standard" data-size="large"></div>
+            data-callback="inicia_sesion"></div>
+            <div class="g_id_signin" data-type="standard" data-size="large"></div>
          </div>
       </div>
 
@@ -45,40 +45,29 @@
 
       <script src="script.js"></script>
       <script>
-         async function credencial_google(comprobante = null) {
-            if (comprobante == null) {
-            
-            } else {
-               let f_data = new FormData( );
+         async function inicia_sesion(comprobante = null) {
+            let f_data = new FormData( );
+            if (comprobante != null) {
                f_data.set("comprobante", comprobante.credential);
-               let resultado = await fetch("backend/login.php", {
-                  "body": f_data,
-                  "method": "POST"
-               });               
-               let json = await resultado.json( );
-               //let texto = await resultado.text( );
-               
-               // alert(texto);
-               if(json == "error-comprobante" || json == "sin-comprobante"){
-                  alert("Fallo interno de la aplicación");
-               } 
-               // else if(texto == "login-activo") {
-               //    alert("PERRO LOCO");
-               //    document.getElementById("no-autenticado").style.display = "none";
-               //    document.getElementById("si-autenticado").style.display = "initial";
-               // } 
-               else {
-                  //let correo = texto.match(/.+@.+\.[A-Z|a-z]{2,}/)[0];
-                  //let nombreCompleto = texto.replace(correo, '').trim();
-                  let correo = json.email;
-                  let nombreCompleto = json.nombre;
+            }
+            let resultado = await fetch("backend/login.php", {
+               "body": f_data,
+               "method": "POST"
+            });               
+            let json = await resultado.json( );
+
+            if (json == "no-autenticado") {
+               alert("Hola! pícale al botón e identíficate ante Google");
+            } else if(json == "error-comprobante"){
+               alert("Fallo interno de la aplicación");
+            } else {
+               let correo = json.email;
+               let nombreCompleto = json.nombre;
                   
-                  alert(`${correo} ${nombreCompleto}`);
-                  document.getElementById("no-autenticado").style.display = "none";
-                  document.getElementById("si-autenticado").style.display = "initial";
-                  console.log(nombreCompleto);
-                  document.getElementById("username").textContent = nombreCompleto;
-               }
+               //alert(`${correo} ${nombreCompleto}`);
+               document.getElementById("no-autenticado").style.display = "none";
+               document.getElementById("si-autenticado").style.display = "initial";
+               document.getElementById("username").textContent = nombreCompleto;
             }
          }
       </script>
