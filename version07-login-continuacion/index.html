@@ -5,7 +5,7 @@
       <script src="https://accounts.google.com/gsi/client" defer></script>
       <link href="styles.css" rel="stylesheet">
    </head>
-   <body onload="inicia_sesion( )">
+   <body onload="inicia_sesion( )"> <!-- sin argumentos: ¿me recuerdas o no? -->
       <div id="no-autenticado" class="no-autenticado">
          <div class="login">
             <h3>Login</h3>
@@ -37,7 +37,10 @@
                   Username: <span id="username"></span>
                </div>
                <textarea id="message-body" class="message-body" placeholder="255 chars max lenght" name="cuerpo" rows="5" minlength="1" maxlength="255" required></textarea>
-               <button class="button" id="button-send" type="button" onclick="enviar(this.form)">Send</button>
+               <div class="botones">
+                  <button class="button" id="button-send" type="button" onclick="enviar(this.form)">Send</button>
+                  <button class="button" id="button-logout" type="button" onclick="logout()">Logout</button>
+               </div>
             </div>
          </form>
       </div>
@@ -57,17 +60,77 @@
             let json = await resultado.json( );
 
             if (json == "no-autenticado") {
-               alert("Hola! pícale al botón e identíficate ante Google");
+               // alert("Hola! pícale al botón e identíficate ante Google");
+               document.getElementById("no-autenticado").style.display = "flex";
             } else if(json == "error-comprobante"){
                alert("Fallo interno de la aplicación");
+               document.getElementById("no-autenticado").style.display = "flex";
             } else {
                let correo = json.email;
-               let nombreCompleto = json.nombre;
-                  
-               //alert(`${correo} ${nombreCompleto}`);
+               let nombreCompleto = json.name;
+
                document.getElementById("no-autenticado").style.display = "none";
                document.getElementById("si-autenticado").style.display = "initial";
                document.getElementById("username").textContent = nombreCompleto;
+               
+               carga();
+            }
+         }
+
+         async function logout(){
+            let resultado = await fetch("backend/logout.php");
+            let respuesta = await resultado.text();
+
+            document.getElementById("si-autenticado").style.display = "none";
+            inicia_sesion(null);
+         }
+
+
+         let padre = document.getElementById("messages");
+         let plantilla = document.getElementById("message_template");
+
+         function agrega_mensaje(autor, fecha, cuerpo) {
+            let copia = plantilla.content.cloneNode(true);
+            copia.querySelector(".author").textContent = autor;
+            copia.querySelector(".date").textContent = fecha;
+            copia.querySelector(".content").textContent = cuerpo;
+            padre.appendChild(copia);
+         }
+
+         async function carga(){
+            let respuesta = await fetch("backend/load.php");
+            let mensajes = await respuesta.json();
+
+            for(let mensaje of mensajes) {
+               agrega_mensaje(mensaje.autor, mensaje.fecha, mensaje.cuerpo);
+            }
+         }
+
+         async function enviar(forma) {
+            if(!forma.reportValidity()){ // checkValidity( ) no regaña
+               return;
+            }
+            let f_data = new FormData(forma);
+            let respuesta = await fetch("backend/sent.php", {
+               "body": f_data,
+               "method": "POST"
+            });
+            let texto = await respuesta.text( ); // Regresa la fecha en caso de NO errores
+            
+            // alert(texto);
+            const espera = function tiempo(valor) {
+               var regex = /\D/;
+               return !regex.test(valor);
+            };
+
+            if(espera(texto)){ // texto == "demasiados-mensajes"
+               alert(`Espera ${10 - texto} segundos`);
+            } else if(texto == "mensaje-vacio"){
+               alert("Mensaje vacio"); // No debería de ocurrir por el reportValidity()
+            } else {
+               agrega_mensaje(document.getElementById("username").textContent, texto, f_data.get("cuerpo"));
+               document.getElementById("message-body").value = "";
+               // alert(texto);
             }
          }
       </script>

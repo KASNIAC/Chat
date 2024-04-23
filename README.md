@@ -89,18 +89,39 @@
  # Cuestiones
 1) ¿Quién debe de controlar que el mensaje no vaya vacío?
 **R.-** tanto el front como el back
+
 2) Actualmente, cuando un usuario manda un mensaje, no aparece de inmediato a los demás, ¿Cómo se soluciona?
-**R.-** [Hay varias formas](https://rxdb.info/articles/websockets-sse-polling-webrtc-webtransport.html)
+**R.-** [existen varias formas](https://rxdb.info/articles/websockets-sse-polling-webrtc-webtransport.html)
+
+3) ¿Un mismo arhcivo PHP puede tener varias sesiones (varios **session_name()**  **session_start()**)?
+**R.-** Sí, siempre y cuando se use **session_write_close()**. NO se recomienda hacerlo.
+
+4) ¿Se debe de tener una sesion (SESSION_NAME) para el login, y otra para el envio de mensajes?
+**R.-** Sí.
+
+5) Para el caso de los mensajes sí se puede controlar que no spameen (haciendo uso de session_id), pero no se puede controlar que un usuario se logee multiples veces (eso lo tendria que controlar en todo caso Google), correcto?
+**R.-** Sí. Recordar que el spam de mensajes se corregirá ahora a partir de la fecha en la que se envió el último mensaje.
+
+6) ¿Cual era el campo de verificacion en caso de que dos correos se asocien con personas diferentes?
+**R.-** $resultado['sub']
+
+7) ¿Puedo mandar a veces JSON y a veces cadenas?
+**R.-** Sí, pero es un caos. Mejor mandar siempre JSON. Cuando s ehace **json_encode**, lo que se produce es la representacion de como se hubiera escrito ese valor en código de JS.
+
+8) La funcion inicia_sesion 
+  - sin argumento: (hola, me recuerdas o no?) NO PASA EL COMPROBANTE
+  - con argumento: google llama a la funcion (hola, traigo este comprobante) SI PASA EL COMPROBANTE
+
+9) ¿Qué pasa si tengo dos archivos .php con el mismo session_name() ? 
+**R.-** Simplemente se comparte la sesion.
 
 
 
 **DUDAS**
-Un mismo arhcivo PHP puede tener varias sesiones (VARIOS SESSION_NAME()  SESSION_START())?
 
-Se debe de tener una sesion (SESSION_NAME) para el login, y otra para el envio de mensajes, correcto?
+Puede ser común la carpeta installer para no andarla copiando varias veces? y styles.css y script.js?
+Para que servia la carpeta installer?
 
-Para el caso de los mensajes SI se puede controlar que no spameen (haciendo uso de session_id), pero no se puede controlar que un usuario se logee multiples veces (Eso lo tendria que controlar en todo caso Google, no?) 
+Pueden ocurrir condiciones de carrera por dos sesiones abiertas en la misma cuenta, pero en dispositivos diferentes?
 
-Cual era el campo de verificacion en caso de que dos correos se asocien con personas diferentes??
-
-Puedo mandar a veces JSOn y a veces cadenas?
+install.php esta fallando, al parecer necesita instalar las tablas en un orden dado
