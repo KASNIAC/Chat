@@ -30,12 +30,14 @@
          $_SESSION['logeado'] = true;
          $_SESSION['name'] = $resultado['name'];
          $_SESSION['email'] = $resultado['email'];
+         
+         die(json_encode([ 'email' => $_SESSION['email'], 'name' => $_SESSION['name'] ]));
       }
-   }
-   
-   if (empty($_SESSION['logeado'])) { // NO estoy logeado
-      die(json_encode('no-autenticado'));
-   } else {
-      die(json_encode([ 'email' => $_SESSION['email'], 'name' => $_SESSION['name'] ])); // YA estoy logueado (ya sea porque ya lo estaba o porque me acabo de loguear)
+   } else { // No me dieron el comprobante
+      if (empty($_SESSION['logeado'])) { // NO estoy logeado
+         die(json_encode('no-autenticado'));
+      } else {
+         die(json_encode([ 'email' => $_SESSION['email'], 'name' => $_SESSION['name'] ])); // YA estaba logeado
+      }
    }
 ?>

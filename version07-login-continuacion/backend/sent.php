@@ -1,59 +1,48 @@
 <?php
-
-use function PHPSTORM_META\type;
-
    require_once('./secret/config.php');
    
    date_default_timezone_set('America/Mexico_City');
-
    session_name(APP_NAME); // La misma sesion que login.php. Ya tengo los datos del usuario
    session_start( );
 
    $conexion = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_DATABASE);
-
-   function recupera_id(){
-      global $conexion;
-
-      $email = $conexion->escape_string($_SESSION['email']);
-      $peticion = $conexion->query("SELECT id_usuario FROM usuario WHERE email = '$email';");
-
-      return $peticion->fetch_assoc()["id_usuario"]; // assoc porque solo tengo una fila
-   }
-
-   function agrega_mensaje(){
-      global $conexion;
-
-      $id_usuario = recupera_id();
-      $fecha = date('Y-m-d H:i:s');
-      $cuerpo = $conexion->escape_string($_POST['cuerpo']);
-
-      $test = $conexion->query("INSERT INTO mensaje (id_usuario, cuerpo, fecha) VALUES ('$id_usuario', '$cuerpo', '$fecha')");
-      die($fecha);
-   }
-
    if(!empty($_POST['cuerpo'])){
+      $cuerpo = $conexion->escape_string($_POST['cuerpo']);
       $email = $conexion->escape_string($_SESSION['email']);
+      $retardo = 10;
 
-      // Pueden ocurrir condiciones de carrera por dos sesiones abiertas en la misma cuenta, pero en dispositivos diferentes?
-      $r1 = $conexion->query("SELECT Mensaje.fecha FROM Mensaje
-         INNER JOIN Usuario ON usuario.id_usuario = mensaje.id_usuario
-         WHERE email = '$email'
-         ORDER BY mensaje.id_mensaje DESC LIMIT 1;");
-      $fecha_ultimo_msj = $r1->fetch_assoc(); // assoc porque solo tengo una fila
-
-      if(isset($fecha_ultimo_msj) == false){
-         agrega_mensaje();
+      $conexion->query("INSERT INTO mensaje 
+         (id_usuario, cuerpo, fecha) 
+      SELECT
+         id_usuario, '$cuerpo', NOW( )
+      FROM
+         Usuario
+      WHERE
+         email = '$email' AND
+         NOT EXISTS (
+            SELECT * FROM Mensaje WHERE 
+               Mensaje.id_usuario = Usuario.id_usuario AND
+               TIMESTAMPDIFF(SECOND, Mensaje.fecha, NOW( )) < $retardo
+         )
+      ");
+      
+      if ($conexion->affected_rows == 1) {
+         $id_mensaje = $conexion->insert_id;    // el id de la última fila que nosotros insertamos
+         $fecha = $conexion->query("SELECT fecha FROM Mensaje WHERE id_mensaje = $id_mensaje")->fetch_assoc( )['fecha'];
+         die(json_encode($fecha));
       } else {
-         $timestamp = strtotime($fecha_ultimo_msj["fecha"]);
-
-         $diferencia = time() - $timestamp;
-         if($diferencia < 10){
-            die((string)$diferencia); // die(demasiados-mensajes);
-         } else {
-            agrega_mensaje();
-         }
+         $espera = $conexion->query("SELECT 
+            TIMESTAMPDIFF(SECOND, NOW( ), ADDTIME(Mensaje.fecha, SEC_TO_TIME($retardo))) AS espera
+         FROM 
+            Mensaje JOIN Usuario USING (id_usuario) 
+         WHERE 
+            email = '$email' 
+         ORDER BY 
+            fecha DESC LIMIT 1
+         ")->fetch_assoc( )['espera'];
+         die(json_encode((int)$espera));
       }
    } else {
-      die("mensaje-vacio");
+      die(json_encode("mensaje-vacio"));
    }
 ?>

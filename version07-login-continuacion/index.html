@@ -60,7 +60,6 @@
             let json = await resultado.json( );
 
             if (json == "no-autenticado") {
-               // alert("Hola! pícale al botón e identíficate ante Google");
                document.getElementById("no-autenticado").style.display = "flex";
             } else if(json == "error-comprobante"){
                alert("Fallo interno de la aplicación");
@@ -79,22 +78,19 @@
 
          async function logout(){
             let resultado = await fetch("backend/logout.php");
-            let respuesta = await resultado.text();
+            let respuesta = await resultado.json();
 
             document.getElementById("si-autenticado").style.display = "none";
-            inicia_sesion(null);
+            inicia_sesion( );
          }
 
-
-         let padre = document.getElementById("messages");
-         let plantilla = document.getElementById("message_template");
-
          function agrega_mensaje(autor, fecha, cuerpo) {
+            let plantilla = document.getElementById("message_template");
             let copia = plantilla.content.cloneNode(true);
             copia.querySelector(".author").textContent = autor;
             copia.querySelector(".date").textContent = fecha;
             copia.querySelector(".content").textContent = cuerpo;
-            padre.appendChild(copia);
+            document.getElementById("messages").appendChild(copia);
          }
 
          async function carga(){
@@ -115,22 +111,15 @@
                "body": f_data,
                "method": "POST"
             });
-            let texto = await respuesta.text( ); // Regresa la fecha en caso de NO errores
-            
-            // alert(texto);
-            const espera = function tiempo(valor) {
-               var regex = /\D/;
-               return !regex.test(valor);
-            };
+            let json = await respuesta.json( ); // Regresa la fecha en caso de NO errores
 
-            if(espera(texto)){ // texto == "demasiados-mensajes"
-               alert(`Espera ${10 - texto} segundos`);
-            } else if(texto == "mensaje-vacio"){
+            if(typeof(json) == "number"){       // como cadena hubiera sido "demasiados-mensajes"
+               alert(`Espera ${json} segundos`);
+            } else if(json == "mensaje-vacio"){
                alert("Mensaje vacio"); // No debería de ocurrir por el reportValidity()
             } else {
-               agrega_mensaje(document.getElementById("username").textContent, texto, f_data.get("cuerpo"));
+               agrega_mensaje(document.getElementById("username").textContent, json, f_data.get("cuerpo"));
                document.getElementById("message-body").value = "";
-               // alert(texto);
             }
          }
       </script>
