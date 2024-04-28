@@ -97,7 +97,7 @@
 **R.-** Sí, siempre y cuando se use **session_write_close()**. NO se recomienda hacerlo.
 
 4) ¿Se debe de tener una sesion (SESSION_NAME) para el login, y otra para el envio de mensajes?
-**R.-** Sí.
+**R.-** En una misma aplicación, cada script debe hacer **session_start**, pero el nombre de sesión pasado a **session_name()** debe coincidir. Diferentes aplicaciones deben tener diferentes nombres de sesión.
 
 5) Para el caso de los mensajes sí se puede controlar que no spameen (haciendo uso de session_id), pero no se puede controlar que un usuario se logee multiples veces (eso lo tendria que controlar en todo caso Google), correcto?
 **R.-** Sí. Recordar que el spam de mensajes se corregirá ahora a partir de la fecha en la que se envió el último mensaje.
@@ -106,7 +106,7 @@
 **R.-** $resultado['sub']
 
 7) ¿Puedo mandar a veces JSON y a veces cadenas?
-**R.-** Sí, pero es un caos. Mejor mandar siempre JSON. Cuando s ehace **json_encode**, lo que se produce es la representacion de como se hubiera escrito ese valor en código de JS.
+**R.-** Sí, pero es un caos. Mejor mandar siempre JSON. Cuando se hace **json_encode**, lo que se produce es la representacion de como se hubiera escrito ese valor en código de JS.
 
 8) La funcion inicia_sesion 
   - sin argumento: (hola, me recuerdas o no?) NO PASA EL COMPROBANTE
