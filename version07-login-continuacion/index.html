@@ -77,9 +77,7 @@
          }
 
          async function logout(){
-            let resultado = await fetch("backend/logout.php");
-            let respuesta = await resultado.json();
-
+            await fetch("backend/logout.php");  // let resultado = await fetch("backend/logout.php");  // let respuesta = await resultado.json();
             document.getElementById("si-autenticado").style.display = "none";
             inicia_sesion( );
          }
@@ -112,7 +110,7 @@
                "method": "POST"
             });
             let json = await respuesta.json( ); // Regresa la fecha en caso de NO errores
-
+            
             if(typeof(json) == "number"){       // como cadena hubiera sido "demasiados-mensajes"
                alert(`Espera ${json} segundos`);
             } else if(json == "mensaje-vacio"){
@@ -120,6 +118,9 @@
             } else {
                agrega_mensaje(document.getElementById("username").textContent, json, f_data.get("cuerpo"));
                document.getElementById("message-body").value = "";
+               
+               let elemento = document.getElementsByClassName("message");
+               elemento[elemento.length - 1].scrollIntoView();
             }
          }
       </script>

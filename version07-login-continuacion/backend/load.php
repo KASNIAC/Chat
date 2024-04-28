@@ -5,7 +5,7 @@
    /*$r1 = $conexion->query("SELECT Usuario.nombre AS autor, Mensaje.cuerpo, Mensaje.fecha FROM Usuario
                            INNER JOIN mensaje
                            ON Usuario.id_usuario = Mensaje.id_usuario
-                           ORDER BY fecha");*/
+                           ORDER BY fecha")*/
    $r1 = $conexion->query("SELECT Usuario.nombre AS autor, Mensaje.cuerpo, Mensaje.fecha FROM 
                            Usuario JOIN mensaje USING (id_usuario)
                            ORDER BY fecha");

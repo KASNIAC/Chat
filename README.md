@@ -81,6 +81,18 @@
 
 
   ## version06-login
+*Se presenta una introducción sobre el uso de login usando la API de Google*
+
+
+<br>
+
+
+  ## version07-login-continuación
+*Notas*
+1) Es importante tener en cuenta que pueden ocurrir condiciones de carrera a la hora de hacer consultas en la BD, por lo que la BD debería ser la que se encargue de controlar dichas consultas (Por ejemplo, si se hace login al mismo tiempo con el mismo correo y la BD no tiene un mecanismo para evitar correos duplicados entonces no bastaría con que el PHP controle eso, la BD debería de poder evitar dichas inserciones. Lo mismo para el envío de mensajes).
+2) La consistencia es importante. Si devuelvo json en un php entonces sería preferible devolverlo en todos.
+3) Las consulas de los archivos **\*_viejo.php** se pueden hacer mucho mas cortas y corrigen las condiciones de carrera, tal y como se muestra en los archivos **\*_sin_id.php**.
+4) Fue necesario guardar el id que ocupa dicho usuario en la BD en la SESSION para facilitar las consultas que se hacen desde **sent.php**. Los archivos **\*_sin_id.php** corresponden a como se hacían esas consultas antes de guardar el id en la sesión.
 
 
 <br>
@@ -115,13 +127,37 @@
 9) ¿Qué pasa si tengo dos archivos .php con el mismo session_name() ? 
 **R.-** Simplemente se comparte la sesion.
 
+10) ¿Pueden ocurrir condiciones de carrera por dos sesiones abiertas en la misma cuenta, pero en dispositivos diferentes?
+**R.-** Sí. Es importante que la BD cuente con los mecanismos para evitar eso.
+
+
+<br>
+
+
+Importante:
+**CONSITENCIA (No andar devolviendo cadenas y json)**
+
+**';' no es necesario si no es multiquery**
+**Se puede hacer un INSERT directamente desde un SELECT**
+**La comunicacion interproceso es lenta(PHP y MySQL)**
+**UPDATE actualiza la fila, REPLACE mata la fila y luego la actualiza
+
+**EXISTS se considera verdadero si el SELECT tiene al menos algo (alguna fila)**
+**También existe NOT EXISTS (lo contrario)**
+
+
+<br>
 
 
 **DUDAS**
 
 Puede ser común la carpeta installer para no andarla copiando varias veces? y styles.css y script.js?
+
 Para que servia la carpeta installer?
 
-Pueden ocurrir condiciones de carrera por dos sesiones abiertas en la misma cuenta, pero en dispositivos diferentes?
-
 install.php esta fallando, al parecer necesita instalar las tablas en un orden dado
+Notas:
+
+
+.. y que ademas no exista ningun Mensaje de la tabla de mensajes (se )
+

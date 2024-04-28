@@ -8,21 +8,24 @@
    $conexion = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_DATABASE);
    if(!empty($_POST['cuerpo'])){
       $cuerpo = $conexion->escape_string($_POST['cuerpo']);
-      $id_usuario = $conexion->escape_string($_SESSION['id_usuario']); // Solo por consistencia
+      $email = $conexion->escape_string($_SESSION['email']);
       $retardo = 10;
 
-      $conexion->query("INSERT INTO Mensaje 
+      $conexion->query("INSERT INTO mensaje 
          (id_usuario, cuerpo, fecha) 
       SELECT
-         '$id_usuario', '$cuerpo', NOW( )
+         id_usuario, '$cuerpo', NOW( )
+      FROM
+         Usuario
       WHERE
+         email = '$email' AND
          NOT EXISTS (
             SELECT * FROM Mensaje WHERE 
-               Mensaje.id_usuario = '$id_usuario' AND 
+               Mensaje.id_usuario = Usuario.id_usuario AND
                TIMESTAMPDIFF(SECOND, Mensaje.fecha, NOW( )) < $retardo
          )
       ");
-
+      
       if ($conexion->affected_rows == 1) {
          $id_mensaje = $conexion->insert_id;    // el id de la última fila que nosotros insertamos
          $fecha = $conexion->query("SELECT fecha FROM Mensaje WHERE id_mensaje = $id_mensaje")->fetch_assoc( )['fecha'];
@@ -31,9 +34,9 @@
          $espera = $conexion->query("SELECT 
             TIMESTAMPDIFF(SECOND, NOW( ), ADDTIME(Mensaje.fecha, SEC_TO_TIME($retardo))) AS espera
          FROM 
-            Mensaje
+            Mensaje JOIN Usuario USING (id_usuario) 
          WHERE 
-            Mensaje.id_usuario = '$id_usuario'
+            email = '$email' 
          ORDER BY 
             fecha DESC LIMIT 1
          ")->fetch_assoc( )['espera'];

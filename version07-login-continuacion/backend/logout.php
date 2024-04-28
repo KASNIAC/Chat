@@ -7,5 +7,5 @@
    session_unset(); // identico a $_SESSION = []
    session_destroy(); // la cookie no se elimina, pero se vuelve inutilizable
 
-   die(json_encode("ok"));
+   // die(json_encode("ok")); // Lo comento porque en el index.html ya no estoy recibiendo la respuesta.
 ?>

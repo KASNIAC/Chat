@@ -18,26 +18,24 @@
          $conexion = new mysqli(DB_HOST, DB_USER, DB_PASSWORD, DB_DATABASE);
          $nombre = $conexion->escape_string($resultado['name']);
          $email = $conexion->escape_string($resultado['email']);
-         $conexion->query("INSERT INTO Usuario (nombre, email) 
+         $conexion->query("
+            INSERT INTO 
+               Usuario (nombre, email) 
             VALUES 
                ('$nombre', '$email')
             ON DUPLICATE KEY UPDATE
                nombre = '$nombre'
          ");
-
-         // Recuperamos el id del usuario:
-         $id_usuario = $conexion->query("SELECT id_usuario FROM Usuario where email = '$email'")->fetch_assoc()["id_usuario"];
          
          $_SESSION['logeado'] = true;
          $_SESSION['name'] = $resultado['name'];
-         $_SESSION['email'] = $resultado['email']; // No es mejor guardar $email (ya la variable escapada de inyeccion SQL?)
-         $_SESSION['id_usuario'] = $id_usuario;
+         $_SESSION['email'] = $resultado['email'];
       }
    }
    
    if (empty($_SESSION['logeado'])) { // NO estoy logeado
       die(json_encode('no-autenticado'));
    } else { // YA estoy logueado (ya sea porque ya lo estaba o porque me acabo de loguear)
-      die(json_encode([ 'email' => $_SESSION['email'], 'name' => $_SESSION['name']])); 
+      die(json_encode([ 'email' => $_SESSION['email'], 'name' => $_SESSION['name'] ])); 
    }
 ?>
