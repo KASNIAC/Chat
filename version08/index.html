@@ -1,0 +1,134 @@
+<!doctype html>
+<html>
+   <head>
+      <meta charset="utf-8">
+      <script src="https://accounts.google.com/gsi/client" defer></script>
+      <link href="styles.css" rel="stylesheet">
+   </head>
+   <body onload="inicia_sesion( )"> <!-- sin argumentos: ¿me recuerdas o no? -->
+      <div id="no-autenticado" class="no-autenticado">
+         <div class="login">
+            <h3>Login</h3>
+            <div id="g_id_onload"
+            data-client_id="330917364178-utl74obou3uhk4ttk86tu0jlbnod1dev.apps.googleusercontent.com"
+            data-auto_prompt="false"
+            data-callback="inicia_sesion"></div>
+            <div class="g_id_signin" data-type="standard" data-size="large"></div>
+         </div>
+      </div>
+
+      <div id="si-autenticado" class="si-autenticado">
+         <div id="messages" class="messages">
+            <template id="message_template">
+               <div class="message sent">
+                  <div class="metadata">
+                     <p class="author">Author</p>
+                     <p class="date">Date</p>
+                  </div>
+                  <div class="content">
+                     Lorem ipsum dolor sit amet consectetur adipisicing elit. A saepe numquam blanditiis eos eveniet quis iusto ex minima cum alias! Ducimus nobis vero quae voluptatem ipsam temporibus in doloribus adipisci?
+                  </div>
+               </div> 
+            </template>
+         </div>
+         <form>
+            <div class="write-message">
+               <div>
+                  Username: <span id="username"></span>
+               </div>
+               <textarea id="message-body" class="message-body" placeholder="255 chars max lenght" name="cuerpo" rows="5" minlength="1" maxlength="255" required></textarea>
+               <div class="botones">
+                  <button class="button" id="button-send" type="button" onclick="enviar(this.form)">Send</button>
+                  <button class="button" id="button-logout" type="button" onclick="logout()">Logout</button>
+               </div>
+            </div>
+         </form>
+      </div>
+
+
+      <script src="script.js"></script>
+      <script>
+         async function inicia_sesion(comprobante = null) {
+            let f_data = new FormData( );
+            if (comprobante != null) {
+               f_data.set("comprobante", comprobante.credential);
+            }
+            let resultado = await fetch("backend/login.php", {
+               "body": f_data,
+               "method": "POST"
+            });               
+            let json = await resultado.json( );
+
+            if (json == "no-autenticado") {
+               document.getElementById("no-autenticado").style.display = "flex";
+            } else if(json == "error-comprobante"){
+               alert("Fallo interno de la aplicación");
+               document.getElementById("no-autenticado").style.display = "flex";
+            } else {
+               let correo = json.email;
+               let nombreCompleto = json.name;
+
+               document.getElementById("no-autenticado").style.display = "none";
+               document.getElementById("si-autenticado").style.display = "initial";
+               document.getElementById("username").textContent = nombreCompleto;
+               
+               carga();
+            }
+         }
+
+         async function logout(){
+            await fetch("backend/logout.php");  // let resultado = await fetch("backend/logout.php");  // let respuesta = await resultado.json();
+            document.getElementById("si-autenticado").style.display = "none";
+            inicia_sesion( );
+         }
+
+         function agrega_mensaje(autor, fecha, cuerpo) {
+            let plantilla = document.getElementById("message_template");
+            let copia = plantilla.content.cloneNode(true);
+            copia.querySelector(".author").textContent = autor;
+            copia.querySelector(".date").textContent = fecha;
+            copia.querySelector(".content").textContent = cuerpo;
+            document.getElementById("messages").appendChild(copia);
+         }
+
+         async function carga(){
+            let respuesta = await fetch("backend/load.php");
+            let mensajes = await respuesta.json();
+
+            for(let mensaje of mensajes) {
+               agrega_mensaje(mensaje.autor, mensaje.fecha, mensaje.cuerpo);
+            }
+         }
+
+         async function enviar(forma) {
+            if(!forma.reportValidity()){ // checkValidity( ) no regaña
+               return;
+            }
+            let f_data = new FormData(forma);
+            let respuesta = await fetch("backend/sent.php", {
+               "body": f_data,
+               "method": "POST"
+            });
+            let json = await respuesta.json( ); // Regresa la fecha en caso de NO errores
+            
+            if(json == "mensaje-vacio"){
+               alert("Mensaje vacio"); // No debería de ocurrir por el reportValidity()
+            } else if(!json.fecha_insercion){
+               alert(`Espera ${json.espera} segundos`);
+            } else {
+               agrega_mensaje(document.getElementById("username").textContent, json.fecha_insercion, f_data.get("cuerpo"));
+               document.getElementById("message-body").value = "";
+               let elemento = document.getElementsByClassName("message");
+               elemento[elemento.length - 1].scrollIntoView();
+            }
+            
+            if (json.espera > 0) {
+               document.getElementById("button-send").disabled = true;
+               setTimeout(function( ) {
+                  document.getElementById("button-send").disabled = false;
+               }, json.espera * 1000);
+            }
+         }
+      </script>
+   </body>
+</html>
