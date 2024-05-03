@@ -7,7 +7,10 @@
 - [version03-ajax-enviar-recibir](#version03-ajax-enviar-recibir)
 - [version04-sesion](#version04-sesion)
 - [version05-sesion-avanzado](#version05-sesion-avanzado)
-- [Cuesrtiones](#Cuestiones)
+- [version06-login](#version06-login)
+- [version07-login-continuación](#version07-login-continuación)
+- [version08](#version08)
+- [Cuestiones](#Cuestiones)
 
 <br>
 
@@ -98,6 +101,13 @@
 <br>
 
 
+  ## version08
+*Se hace uso de la biblioteca db_access*
+->fetch_assoc() se cambia por ->[0]
+
+<br>
+
+
  # Cuestiones
 1) ¿Quién debe de controlar que el mensaje no vaya vacío?
 **R.-** tanto el front como el back
@@ -140,24 +150,7 @@ Importante:
 **';' no es necesario si no es multiquery**
 **Se puede hacer un INSERT directamente desde un SELECT**
 **La comunicacion interproceso es lenta(PHP y MySQL)**
-**UPDATE actualiza la fila, REPLACE mata la fila y luego la actualiza
+**UPDATE actualiza la fila, REPLACE mata la fila y luego la actualiza**
 
 **EXISTS se considera verdadero si el SELECT tiene al menos algo (alguna fila)**
 **También existe NOT EXISTS (lo contrario)**
-
-
-<br>
-
-
-**DUDAS**
-
-Puede ser común la carpeta installer para no andarla copiando varias veces? y styles.css y script.js?
-
-Para que servia la carpeta installer?
-
-install.php esta fallando, al parecer necesita instalar las tablas en un orden dado
-Notas:
-
-
-.. y que ademas no exista ningun Mensaje de la tabla de mensajes (se )
-

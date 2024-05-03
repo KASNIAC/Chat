@@ -1,13 +1,21 @@
 body {
-   background-color: burlywood;
+   background-color: #2a314a;
+   color: #b5d8f5;
    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-.messages {
+} 
+.outer {
    max-width: 700px;
    height: 70vh;
-   border: 10px solid red;
    margin: auto auto;
-   overflow: auto;
+   border: 5px solid #8aaacd;
+   border-radius: 15pt;
+   background-color: 	#8aaacd;
+   overflow: hidden;
+   color: #2a314a;
+}
+.messages {
+   height: 100%;
+   overflow-y: auto;
 }
 .write-message {
    display: flex;
@@ -17,14 +25,19 @@ body {
    height: 20vh;
    
    margin: 10px auto;
-   padding: 10px;
-   border: 3px solid red;
+   padding: 5px 20px;
+   border-radius: 10px;
+   background-color: #8aaacd;
+   color: #2a314a;
 }
 .message-body {
    box-sizing: border-box;
    resize: none;
    margin: 0 auto;
    width: 100%;
+   border-radius: 10px;
+   color: #2a314a;
+   background-color: #b5d8f5;
 }
 .button {
    width: 25%;
@@ -32,6 +45,13 @@ body {
    margin: auto auto;
    border-radius: 5px;
    cursor: pointer;
+
+   color: #8aaacd;
+   border: none;
+   background-color:  #2a314a;
+}
+.button:hover {
+   background-color: #415777;
 }
 .botones {
    display: flex;
@@ -48,7 +68,7 @@ body {
 }
 .sent {
    box-sizing: border-box;
-   border: 3px solid blue;
+   background-color: #b5d8f5;
 }
 .metadata {
    display: flex;
@@ -79,13 +99,13 @@ form .write-message textarea:hover {
    align-items: center;
    justify-content: center;
    min-height: 90vh;
-   border: 10px solid black;
 }
 .login {
-   border: 1vh solid black;
+   border: 1px solid #2a314a;
+   border-radius: 10px;
    /* margin: 3em 0; */
    min-width: 50%;
-   min-height: 60vh;
+   min-height: 80vh;
    box-sizing: border-box;
    
    display: flex;

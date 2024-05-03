@@ -18,18 +18,20 @@
       </div>
 
       <div id="si-autenticado" class="si-autenticado">
-         <div id="messages" class="messages">
-            <template id="message_template">
-               <div class="message sent">
-                  <div class="metadata">
-                     <p class="author">Author</p>
-                     <p class="date">Date</p>
-                  </div>
-                  <div class="content">
-                     Lorem ipsum dolor sit amet consectetur adipisicing elit. A saepe numquam blanditiis eos eveniet quis iusto ex minima cum alias! Ducimus nobis vero quae voluptatem ipsam temporibus in doloribus adipisci?
-                  </div>
-               </div> 
-            </template>
+         <div class="outer"> <!-- https://stackoverflow.com/questions/16676166/apply-border-radius-to-scrollbars-with-css -->
+            <div id="messages" class="messages">
+               <template id="message_template">
+                  <div class="message sent">
+                     <div class="metadata">
+                        <p class="author">Author</p>
+                        <p class="date">Date</p>
+                     </div>
+                     <div class="content">
+                        Lorem ipsum dolor sit amet consectetur adipisicing elit. A saepe numquam blanditiis eos eveniet quis iusto ex minima cum alias! Ducimus nobis vero quae voluptatem ipsam temporibus in doloribus adipisci?
+                     </div>
+                  </div> 
+               </template>
+            </div>
          </div>
          <form>
             <div class="write-message">
@@ -123,9 +125,13 @@
             }
             
             if (json.espera > 0) {
-               document.getElementById("button-send").disabled = true;
+               // document.getElementById("button-send").disabled = true;
+               document.getElementById("button-send").style.backgroundColor = "grey";
+               document.getElementById("button-send").style.cursor = "not-allowed";
                setTimeout(function( ) {
-                  document.getElementById("button-send").disabled = false;
+                  // document.getElementById("button-send").disabled = false;
+                  document.getElementById("button-send").style.backgroundColor = "#2a314a";
+                  document.getElementById("button-send").style.cursor = "pointer";
                }, json.espera * 1000);
             }
          }
